@@ -95,24 +95,24 @@ const weaponDefSchema = [
         fields: [
           { name: "ID", type: "uint32", defaultValue: 0 },
           {
-            name: "unknownArray1",
+            name: "FIRE_MODES",
             type: "array",
             defaultValue: [],
             fields: [
-              { name: "unknownDword1", type: "uint32", defaultValue: 0 },
+              { name: "FIRE_MODE_ID", type: "uint32", defaultValue: 0 },
             ],
           },
-          { name: "unknownByte1", type: "uint8", defaultValue: 0 },
-          { name: "unknownDword1", type: "uint32", defaultValue: 0 },
-          { name: "unknownDword2", type: "uint32", defaultValue: 0 },
-          { name: "unknownDword3", type: "uint32", defaultValue: 0 },
-          { name: "unknownDword4", type: "uint32", defaultValue: 0 },
-          { name: "unknownDword5", type: "uint32", defaultValue: 0 },
-          { name: "unknownDword6", type: "uint32", defaultValue: 0 },
-          { name: "unknownDword7", type: "uint32", defaultValue: 0 },
-          { name: "unknownDword8", type: "uint32", defaultValue: 0 },
-          { name: "unknownDword9", type: "uint32", defaultValue: 0 },
-          { name: "unknownDword10", type: "uint32", defaultValue: 0 },
+          { name: "FLAGS", type: "uint8", defaultValue: 0 },
+          { name: "CHAMBER_DURATION_MS", type: "uint32", defaultValue: 0 },
+          { name: "IMAGE_SET_OVERRIDE", type: "uint32", defaultValue: 0 },
+          { name: "TRANSITION_DURATION_MS", type: "uint32", defaultValue: 0 },
+          { name: "ANIM_ACTOR_SLOT_OVERRIDE", type: "uint32", defaultValue: 0 },
+          { name: "DEPLOYABLE_ID", type: "uint32", defaultValue: 0 },
+          { name: "SPIN_UP_TIME_MS", type: "uint32", defaultValue: 0 },
+          { name: "SPIN_UP_MOVEMENT_MODIFIER", type: "uint32", defaultValue: 0 },
+          { name: "SPIN_UP_TURN_RATE_MODIFIER", type: "uint32", defaultValue: 0 },
+          { name: "SPOOL_UP_TIME_MS", type: "uint32", defaultValue: 0 },
+          { name: "SPOOL_UP_INITIAL_REFIRE_MS", type: "uint32", defaultValue: 0 },
         ],
       },
     ],
@@ -603,6 +603,18 @@ fs.readFile('C:\\Users\\csm45\\Desktop\\defs\\weapondefinitions.bin',
       }
     }
   }),
+  FIRE_GROUP_DEFINITIONS = weaponDefs.result.FIRE_GROUP_DEFINITIONS.map((e: any) => {
+    return {
+      ID: e.ID,
+        DATA: {
+          ...e.DATA,
+          
+          FIRE_MODES: e.DATA.FIRE_MODES.filter((e: any, idx: number) => {
+            if(idx <= 1) return e.FIRE_MODE_ID
+          })
+        }
+      }
+  }),
   FIRE_MODE_DEFINITIONS = weaponDefs.result.FIRE_MODE_DEFINITIONS.map((e: any) => {
     return {
       ID: e.ID,
@@ -781,7 +793,7 @@ fs.readFile('C:\\Users\\csm45\\Desktop\\defs\\weapondefinitions.bin',
   console.log(weaponDefs.result.FIRE_GROUP_DEFINITIONS)
   const newDefs = {
     WEAPON_DEFINITIONS: WEAPON_DEFINITIONS,
-    FIRE_GROUP_DEFINITIONS: weaponDefs.result.FIRE_GROUP_DEFINITIONS,
+    FIRE_GROUP_DEFINITIONS: FIRE_GROUP_DEFINITIONS,
     FIRE_MODE_DEFINITIONS: FIRE_MODE_DEFINITIONS,
     PLAYER_STATE_GROUP_DEFINITIONS: weaponDefs.result.PLAYER_STATE_GROUP_DEFINITIONS,
     FIRE_MODE_PROJECTILE_MAPPING_DATA: weaponDefs.result.FIRE_MODE_PROJECTILE_MAPPING_DATA,
